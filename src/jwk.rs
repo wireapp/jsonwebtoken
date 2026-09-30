@@ -534,8 +534,10 @@ impl Jwk {
                     // Get the curve type based off the encoding key length
                     // Note: here we will receive a DER key which contains a 16 byte ANS.1 header
                     let curve_type: EllipticCurve = match key.as_bytes().len() {
-                        // 16 byte header + 32 byte Ed25519 key
+                        // 16 byte header + 32 byte Ed25519 private key
                         48 => Ok(EllipticCurve::Ed25519),
+                        // 16 byte header + 32 byte Ed25519 private key + public key
+                        83 => Ok(EllipticCurve::Ed25519),
                         _ => Err(Error::from(ErrorKind::InvalidEddsaKey)),
                     }?;
 
